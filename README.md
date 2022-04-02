@@ -1,3 +1,5 @@
+Forked to support multiple locations and some extra features that I care about.
+
 # Home-Assistant-wundergroundpws
 Home Assistant custom component sensor for Weather Underground personal weather station users
 
