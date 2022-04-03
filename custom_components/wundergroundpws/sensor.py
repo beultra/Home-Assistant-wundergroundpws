@@ -363,6 +363,8 @@ async def async_setup_platform(hass: HomeAssistantType, config: ConfigType,
     rest = WUndergroundData(
         hass, config.get(CONF_API_KEY), pws_id, numeric_precision, unit_system_api, unit_system,
         config.get(CONF_LANG), latitude, longitude)
+    
+    _LOGGER.info("WU async rest %s", rest)
 
     if pws_id is None:
         if conf_id is None:
@@ -549,6 +551,8 @@ class WUndergroundData:
                 raise ValueError('NO FORECAST RESULT')
 
             result = {**result_forecast}
+            
+            _LOGGER.info("WUnderground response: %s", result)
 
             self.data = result
         except ValueError as err:
