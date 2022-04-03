@@ -36,6 +36,7 @@ _LOGGER = logging.getLogger(__name__)
 
 CONF_ATTRIBUTION = "Data provided by the WUnderground weather service"
 CONF_PWS_ID = 'pws_id'
+CONF_ID = 'id'
 CONF_NUMERIC_PRECISION = 'numeric_precision'
 CONF_LANG = 'lang'
 
@@ -331,6 +332,7 @@ LANG_CODES = [
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_API_KEY): cv.string,
     vol.Optional(CONF_PWS_ID): cv.string,
+    vol.Optional(CONF_ID): cv.string,
     vol.Required(CONF_NUMERIC_PRECISION): cv.string,
     vol.Optional(CONF_LANG, default=DEFAULT_LANG): vol.All(vol.In(LANG_CODES)),
     vol.Inclusive(CONF_LATITUDE, 'coordinates',
@@ -348,6 +350,7 @@ async def async_setup_platform(hass: HomeAssistantType, config: ConfigType,
     latitude = config.get(CONF_LATITUDE, hass.config.latitude)
     longitude = config.get(CONF_LONGITUDE, hass.config.longitude)
     pws_id = config.get(CONF_PWS_ID)
+    id = config.get(CONF_ID)
     numeric_precision = config.get(CONF_NUMERIC_PRECISION)
 
     if hass.config.units.is_metric:
@@ -362,7 +365,10 @@ async def async_setup_platform(hass: HomeAssistantType, config: ConfigType,
         config.get(CONF_LANG), latitude, longitude)
 
     if pws_id is None:
-        unique_id_base = "@{:06f},{:06f}".format(longitude, latitude)
+        if conf_id is None:
+            unique_id_base = "@{:06f},{:06f}".format(longitude, latitude)
+        else:
+            unique_id_base = id
     else:
         # Manually specified weather station, use that for unique_id
         unique_id_base = pws_id
