@@ -132,9 +132,9 @@ class WUDailyTextForecastSensorConfig(WUSensorConfig):
             feature='forecast',
             value=lambda wu: wu.data['daypart'][0]['narrative'][period],
             entity_picture=lambda wu: '/local/wupws_icons/' + str(wu.data['daypart'][0]['iconCode'][period]) + '.png',
-            device_state_attributes={
-                'date': lambda wu: wu.data['observations'][0]['obsTimeLocal']
-            }
+            #device_state_attributes={
+            #    'date': lambda wu: wu.data['observations'][0]['obsTimeLocal']
+            #}
         )
 
 
@@ -158,9 +158,9 @@ class WUDailySimpleForecastSensorConfig(WUSensorConfig):
             unit_of_measurement=lambda wu: wu.units_of_measurement[unit_of_measurement],
             entity_picture=lambda wu: str(wu.data['daypart'][0]['iconCode'][period]) if not icon else None,
             icon=icon,
-            device_state_attributes={
-                'date': lambda wu: wu.data['observations'][0]['obsTimeLocal']
-            },
+            #device_state_attributes={
+            #    'date': lambda wu: wu.data['observations'][0]['obsTimeLocal']
+            #},
             device_class=device_class
         )
 
