@@ -535,19 +535,6 @@ class WUndergroundData:
         """Get the latest data from WUnderground."""
         headers = {'Accept-Encoding': 'gzip'}
         try:
-            result_current = None
-            if self._pws_id:
-                with async_timeout.timeout(10):
-                    response = await self._session.get(self._build_url(_RESOURCECURRENT), headers=headers)
-                result_current = await response.json()
-
-                # need to check specific new api errors
-                # if "error" in result['response']:
-                #     raise ValueError(result['response']["error"]["description"])
-                # _LOGGER.debug('result_current' + str(result_current))
-
-                if result_current is None:
-                    raise ValueError('NO CURRENT RESULT')
             with async_timeout.timeout(10):
                 response = await self._session.get(self._build_url(_RESOURCEFORECAST), headers=headers)
             result_forecast = await response.json()
@@ -555,7 +542,7 @@ class WUndergroundData:
             if result_forecast is None:
                 raise ValueError('NO FORECAST RESULT')
 
-            result = {**result_current, **result_forecast}
+            result = {**result_forecast}
 
             self.data = result
         except ValueError as err:
