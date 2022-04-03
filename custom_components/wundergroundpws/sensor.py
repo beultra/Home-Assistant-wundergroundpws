@@ -535,6 +535,7 @@ class WUndergroundData:
         """Get the latest data from WUnderground."""
         headers = {'Accept-Encoding': 'gzip'}
         try:
+            result_current = None
             if self._pws_id:
                 with async_timeout.timeout(10):
                     response = await self._session.get(self._build_url(_RESOURCECURRENT), headers=headers)
