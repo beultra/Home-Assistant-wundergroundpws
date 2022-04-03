@@ -330,7 +330,7 @@ LANG_CODES = [
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_API_KEY): cv.string,
-    vol.Required(CONF_PWS_ID): cv.string,
+    vol.Optional(CONF_PWS_ID): cv.string,
     vol.Required(CONF_NUMERIC_PRECISION): cv.string,
     vol.Optional(CONF_LANG, default=DEFAULT_LANG): vol.All(vol.In(LANG_CODES)),
     vol.Inclusive(CONF_LATITUDE, 'coordinates',
@@ -535,17 +535,18 @@ class WUndergroundData:
         """Get the latest data from WUnderground."""
         headers = {'Accept-Encoding': 'gzip'}
         try:
-            with async_timeout.timeout(10):
-                response = await self._session.get(self._build_url(_RESOURCECURRENT), headers=headers)
-            result_current = await response.json()
+            if self._pws_id:
+                with async_timeout.timeout(10):
+                    response = await self._session.get(self._build_url(_RESOURCECURRENT), headers=headers)
+                result_current = await response.json()
 
-            # need to check specific new api errors
-            # if "error" in result['response']:
-            #     raise ValueError(result['response']["error"]["description"])
-            # _LOGGER.debug('result_current' + str(result_current))
+                # need to check specific new api errors
+                # if "error" in result['response']:
+                #     raise ValueError(result['response']["error"]["description"])
+                # _LOGGER.debug('result_current' + str(result_current))
 
-            if result_current is None:
-                raise ValueError('NO CURRENT RESULT')
+                if result_current is None:
+                    raise ValueError('NO CURRENT RESULT')
             with async_timeout.timeout(10):
                 response = await self._session.get(self._build_url(_RESOURCEFORECAST), headers=headers)
             result_forecast = await response.json()
