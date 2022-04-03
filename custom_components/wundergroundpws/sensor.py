@@ -350,7 +350,7 @@ async def async_setup_platform(hass: HomeAssistantType, config: ConfigType,
     latitude = config.get(CONF_LATITUDE, hass.config.latitude)
     longitude = config.get(CONF_LONGITUDE, hass.config.longitude)
     pws_id = config.get(CONF_PWS_ID)
-    id = config.get(CONF_ID)
+    conf_id = config.get(CONF_ID)
     numeric_precision = config.get(CONF_NUMERIC_PRECISION)
 
     if hass.config.units.is_metric:
@@ -368,7 +368,7 @@ async def async_setup_platform(hass: HomeAssistantType, config: ConfigType,
         if conf_id is None:
             unique_id_base = "@{:06f},{:06f}".format(longitude, latitude)
         else:
-            unique_id_base = id
+            unique_id_base = conf_id
     else:
         # Manually specified weather station, use that for unique_id
         unique_id_base = pws_id
